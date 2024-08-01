@@ -26,7 +26,7 @@ app.use("/api/district", districtRoutes);
 
 // only reached when a request doesn't get a response from any other middleware
 app.use((req, res, next) => {
-  const error = new HttpError("Couldn't find this route", 404);
+  const error = new HttpError("Couldn't find this route", 401);
   throw error;
 });
 
