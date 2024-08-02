@@ -5,6 +5,11 @@ const districtControllers = require("../controllers/district-controllers");
 const { check } = require("express-validator");
 
 /*
+ * GET to get all districts in the DB
+ */
+router.get("/all", districtControllers.getAllDistricts);
+
+/*
  * POST for creating new place (has validation via check())
  */
 router.post(

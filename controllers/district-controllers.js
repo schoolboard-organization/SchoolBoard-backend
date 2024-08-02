@@ -59,5 +59,29 @@ const createDistrict = async (req, res, next) => {
   res.status(201).json({ createdDistrict: newDistrict });
 };
 
+/*
+ * * * * * * * * * * * * * * * * * * * GET for all users  * * * * * * * * * * * * * * * * * * * * *
+ */
+
+const getAllDistricts = async (req, res, next) => {
+  let allDistricts;
+
+  try {
+    allDistricts = await District.find({});
+
+    if (!allDistricts.length) {
+      return res.status(404).json({
+        errorMessage: "No district found. FIRST ERROR IN getAllDistricts",
+      });
+    }
+
+    res.status(200).json({ allDistricts: allDistricts });
+  } catch (err) {
+    const error = new HttpError("Error in getAllDistricts.");
+    return next(error);
+  }
+};
+
 // exports
 exports.createDistrict = createDistrict;
+exports.getAllDistricts = getAllDistricts;
