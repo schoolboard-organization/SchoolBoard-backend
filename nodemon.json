@@ -1,9 +1,0 @@
-{
-    "env": {
-        "DB_USER": "kennyang",
-        "DB_PASSWORD": "Jessica13039Jessica",
-        "DB_NAME": "kennyang",
-        "GOOGLE_API_KEY": "AIzaSyD2qQd09kFxku0qZimSAtos7-qCrAqhNmg",
-        "JWT_KEY": "secret_secret_ooo"
-    }
-}
