@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const DB_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.p6s9frw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 const districtRoutes = require("./routes/district-routes");
 const app = express();
+const HttpError = require("./models/http-error");
 
 // body parser so we don't have to do it manually
 app.use(bodyParser.json());
