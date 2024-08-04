@@ -32,8 +32,6 @@ const createDistrict = async (req, res, next) => {
     districtNumber,
   });
 
-  // ADDING COMMENT TO RE-PUSH
-
   // saves newly made district
   try {
     // starts session
@@ -64,17 +62,19 @@ const createDistrict = async (req, res, next) => {
  */
 
 const getAllDistricts = async (req, res, next) => {
-  let allDistricts;
+  let allDistricts; // variable to store all districts in the DB
 
   try {
-    allDistricts = await District.find({});
+    allDistricts = await District.find({}); // .find({}) finds all elements in the db
 
+    // checks if there are no districts to return
     if (!allDistricts.length) {
       return res.status(404).json({
         errorMessage: "No district found. FIRST ERROR IN getAllDistricts",
       });
     }
 
+    // returns all districts
     res.status(200).json({ allDistricts: allDistricts });
   } catch (err) {
     const error = new HttpError("Error in getAllDistricts.");
@@ -82,6 +82,35 @@ const getAllDistricts = async (req, res, next) => {
   }
 };
 
+/*
+ * * * * * * * * * * * * * * * * * * * GET district given specific district number  * * * * * * * * * * * * * * * * * * * * *
+ */
+const getDistrictByDistrictNumber = async (req, res, next) => {
+  // grabs district number in URL
+  const districtNumberFromUrl = req.params.districtNumber;
+
+  let foundDistrict; // variable to store the corresponding district associated with districtNumber
+
+  // use district number from url as a parameter to search
+  try {
+    foundDistrict = await District.find({
+      districtNumber: districtNumberFromUrl,
+    });
+  } catch (err) {
+    const error = new HttpError(
+      "Error finding district by district number. ERROR IN DISTRICT CONTROLLERS",
+      404
+    );
+    return next(error);
+  }
+
+  // sending response
+  res.status(200).json({
+    districtName: foundDistrict,
+  });
+};
+
 // exports
 exports.createDistrict = createDistrict;
 exports.getAllDistricts = getAllDistricts;
+exports.getDistrictByDistrictNumber = getDistrictByDistrictNumber;
