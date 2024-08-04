@@ -10,6 +10,14 @@ const { check } = require("express-validator");
 router.get("/all", districtControllers.getAllDistricts);
 
 /*
+ * GET for a specific district given district number
+ */
+router.get(
+  "/districtNumber/:districtNumber",
+  districtControllers.getDistrictByDistrictNumber
+);
+
+/*
  * POST for creating new place (has validation via check())
  */
 router.post(
