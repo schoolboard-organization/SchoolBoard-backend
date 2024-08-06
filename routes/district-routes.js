@@ -12,10 +12,7 @@ router.get("/all", districtControllers.getAllDistricts);
 /*
  * GET for a specific district given district number
  */
-router.get(
-  "/districtNumber/:districtNumber",
-  districtControllers.getDistrictByDistrictNumber
-);
+router.get("/zipcode/:ZipCode", districtControllers.getDistrictByZipCode);
 
 /*
  * POST for creating new place (has validation via check())
@@ -24,6 +21,7 @@ router.post(
   "/",
   [
     check("districtNumber").not().isEmpty(),
+    check("districtName").not().isEmpty(),
     check("districtName").not().isEmpty(),
   ],
   districtControllers.createDistrict

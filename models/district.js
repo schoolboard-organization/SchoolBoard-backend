@@ -10,6 +10,7 @@ const Schema = mongoose.Schema;
 const district_schema = new Schema({
   districtNumber: { type: String, required: true },
   districtName: { type: String, required: true },
+  districtZipCode: { type: Number, required: true },
 });
 
 // export schema as "Place"
