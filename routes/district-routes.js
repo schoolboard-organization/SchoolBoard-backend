@@ -22,7 +22,7 @@ router.post(
   [
     check("districtNumber").not().isEmpty(),
     check("districtName").not().isEmpty(),
-    check("districtName").not().isEmpty(),
+    check("districtZipCode").not().isEmpty(),
   ],
   districtControllers.createDistrict
 );
