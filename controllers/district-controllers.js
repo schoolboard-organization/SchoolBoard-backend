@@ -24,12 +24,13 @@ const createDistrict = async (req, res, next) => {
     return next(new HttpError("Invalid inputs, double check fields.", 422));
   }
   // object destructuring from the request body
-  const { districtName, districtNumber } = req.body;
+  const { districtName, districtNumber, districtZipCode } = req.body;
 
   // create new mongoose District object
   const newDistrict = new District({
     districtName,
     districtNumber,
+    districtZipCode,
   });
 
   // saves newly made district
@@ -85,20 +86,20 @@ const getAllDistricts = async (req, res, next) => {
 /*
  * * * * * * * * * * * * * * * * * * * GET district given specific district number  * * * * * * * * * * * * * * * * * * * * *
  */
-const getDistrictByDistrictNumber = async (req, res, next) => {
+const getDistrictByZipCode = async (req, res, next) => {
   // grabs district number in URL
-  const districtNumberFromUrl = req.params.districtNumber;
+  const zipCodeFromUrl = req.params.ZipCode;
 
   let foundDistrict; // variable to store the corresponding district associated with districtNumber
 
   // use district number from url as a parameter to search
   try {
     foundDistrict = await District.find({
-      districtNumber: districtNumberFromUrl,
+      districtZipCode: zipCodeFromUrl,
     });
   } catch (err) {
     const error = new HttpError(
-      "Error finding district by district number. ERROR IN DISTRICT CONTROLLERS",
+      "Error finding district by ZipCode. ERROR IN DISTRICT CONTROLLERS",
       404
     );
     return next(error);
@@ -106,11 +107,11 @@ const getDistrictByDistrictNumber = async (req, res, next) => {
 
   // sending response
   res.status(200).json({
-    districtName: foundDistrict,
+    foundDistrict: foundDistrict,
   });
 };
 
 // exports
 exports.createDistrict = createDistrict;
 exports.getAllDistricts = getAllDistricts;
-exports.getDistrictByDistrictNumber = getDistrictByDistrictNumber;
+exports.getDistrictByZipCode = getDistrictByZipCode;
