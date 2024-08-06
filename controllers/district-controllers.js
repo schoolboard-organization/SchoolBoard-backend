@@ -84,15 +84,15 @@ const getAllDistricts = async (req, res, next) => {
 };
 
 /*
- * * * * * * * * * * * * * * * * * * * GET district given specific district number  * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * GET district given specific zipCode  * * * * * * * * * * * * * * * * * * * * *
  */
 const getDistrictByZipCode = async (req, res, next) => {
-  // grabs district number in URL
+  // grabs district zip code in URL
   const zipCodeFromUrl = req.params.ZipCode;
 
-  let foundDistrict; // variable to store the corresponding district associated with districtNumber
+  let foundDistrict; // variable to store the corresponding district associated with zip code
 
-  // use district number from url as a parameter to search
+  // use zip code from url as a parameter to search
   try {
     foundDistrict = await District.find({
       districtZipCode: zipCodeFromUrl,
