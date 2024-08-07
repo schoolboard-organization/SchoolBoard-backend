@@ -7,21 +7,44 @@ const DB_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@
 const districtRoutes = require("./routes/district-routes");
 const app = express();
 const HttpError = require("./models/http-error");
+const cors = require("cors");
+
+// CORS configuration
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+  ],
+  credentials: true,
+};
+
+app.options("*", cors(corsOptions)); // preflight response handling
+app.use(cors(corsOptions));
 
 // body parser so we don't have to do it manually
 app.use(bodyParser.json());
 
-// for CORS error
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+// // for CORS error
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
 
-  next();
-});
+//   // Handle OPTIONS method
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+
+//   next();
+// });
 
 // requests for districts must START with /api/district, routes to to districtRoutes
 app.use("/api/district", districtRoutes);
