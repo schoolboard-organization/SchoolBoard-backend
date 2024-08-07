@@ -18,7 +18,7 @@ router.get("/zipcode/:ZipCode", districtControllers.getDistrictByZipCode);
  * POST for creating new place (has validation via check())
  */
 router.post(
-  "/",
+  "/new",
   [
     check("districtNumber").not().isEmpty(),
     check("districtName").not().isEmpty(),
