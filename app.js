@@ -7,28 +7,58 @@ const DB_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@
 const districtRoutes = require("./routes/district-routes");
 const app = express();
 const HttpError = require("./models/http-error");
+const cors = require("cors");
 
 // body parser so we don't have to do it manually
 app.use(bodyParser.json());
 
-// for CORS error
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+// Basic CORS configuration allowing all origins
+app.use(cors());
 
-  // Handle OPTIONS method
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+// More detailed CORS configuration
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests from specific origins
+    const allowedOrigins = ["https://http://localhost:5000"];
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false, // if you need to support cookies or HTTP authentication
+};
+
+app.use(cors(corsOptions));
+
+// // for CORS error
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+//   // Handle OPTIONS method
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+//   next();
+// });
 
 // requests for districts must START with /api/district, routes to to districtRoutes
 app.use("/api/district", districtRoutes);
+
+app.use((err, req, res, next) => {
+  if (err.message === "Not allowed by CORS") {
+    res.status(403).json({ message: "CORS Error: Access denied" });
+  } else {
+    next(err);
+  }
+});
 
 // only reached when a request doesn't get a response from any other middleware
 app.use((req, res, next) => {
