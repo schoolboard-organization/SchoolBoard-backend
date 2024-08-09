@@ -19,16 +19,26 @@ app.use(cors());
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests from specific origins
-    const allowedOrigins = ["http://localhost:5000"];
+    const allowedOrigins = ["http://localhost:3000"];
     if (allowedOrigins.includes(origin) || !origin) {
+      console.log("run callback for request");
+
       callback(null, true);
     } else {
+      console.log(origin);
+      console.log(allowedOrigins);
       callback(new Error("Not allowed by CORS"));
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: false, // if you need to support cookies or HTTP authentication
+  allowedHeaders: [
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+  ],
+  //credentials: false, // if you need to support cookies or HTTP authentication
 };
 
 app.use(cors(corsOptions));
@@ -54,6 +64,7 @@ app.use("/api/district", districtRoutes);
 
 app.use((err, req, res, next) => {
   if (err.message === "Not allowed by CORS") {
+    console.log(err.message);
     res.status(403).json({ message: "CORS Error: Access denied" });
   } else {
     next(err);
@@ -62,6 +73,7 @@ app.use((err, req, res, next) => {
 
 // only reached when a request doesn't get a response from any other middleware
 app.use((req, res, next) => {
+  console.log("couldn't find this route");
   const error = new HttpError("Couldn't find this route", 404);
   throw error;
 });
