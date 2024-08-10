@@ -9,39 +9,24 @@ const app = express();
 const HttpError = require("./models/http-error");
 const cors = require("cors");
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with your frontend's domain
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
+  })
+);
+
+app.options("*", cors());
+
 // body parser so we don't have to do it manually
 app.use(bodyParser.json());
-
-// Basic CORS configuration allowing all origins
-app.use(cors());
-
-// More detailed CORS configuration
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests from specific origins
-    const allowedOrigins = ["http://localhost:3000"];
-    if (allowedOrigins.includes(origin) || !origin) {
-      console.log("run callback for request");
-
-      callback(null, true);
-    } else {
-      console.log(origin);
-      console.log(allowedOrigins);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: [
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization",
-  ],
-  //credentials: false, // if you need to support cookies or HTTP authentication
-};
-
-app.use(cors(corsOptions));
 
 // // for CORS error
 // app.use((req, res, next) => {
