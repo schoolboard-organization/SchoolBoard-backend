@@ -12,7 +12,21 @@ router.get("/all", districtControllers.getAllDistricts);
 /*
  * GET for a specific district given district number
  */
-router.get("/zipcode/:ZipCode", districtControllers.getDistrictByZipCode);
+router.get("/number/:districtNumber", districtControllers.getDistrictByNumber);
+
+/*
+ * POST for adding board member to district and DB (has validation via check())
+ */
+router.post(
+  "/member/add/:districtNumber_",
+  [
+    check("member_firstName").not().isEmpty(),
+    check("member_lastName").not().isEmpty(),
+    check("member_role").not().isEmpty(),
+    check("member_homeDistrict").not().isEmpty(),
+  ],
+  districtControllers.addMember
+);
 
 /*
  * POST for creating new place (has validation via check())
