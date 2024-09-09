@@ -35,6 +35,7 @@ const getAllMemberForDistrict = async (req, res, next) => {
       "Error finding district while getting all members. In getAllMemberForDistrict.",
       500
     );
+    return next(error);
   }
 
   // second, using the associatedDistrict, get its _id
@@ -51,6 +52,7 @@ const getAllMemberForDistrict = async (req, res, next) => {
       "Error finding all board members. In getAllMemberForDistrict.",
       500
     );
+    return next(error);
   }
 
   console.log("District id" + associatedDistrictId);

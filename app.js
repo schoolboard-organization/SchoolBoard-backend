@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const DB_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.p6s9frw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 const districtRoutes = require("./routes/district-routes");
 const boardRoutes = require("./routes/board-routes");
+const userRoutes = require("./routes/user-routes");
 const app = express();
 const HttpError = require("./models/http-error");
 
@@ -33,6 +34,9 @@ app.use("/api/district", districtRoutes);
 
 // requests for board members must START with /api/board, routes to boardRoutes
 app.use("/api/board", boardRoutes);
+
+// requests for users must START with /api/user, routes to userRoutes
+app.use("/api/user", userRoutes);
 
 // only reached when a request doesn't get a response from any other middleware
 app.use((req, res, next) => {
