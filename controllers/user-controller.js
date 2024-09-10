@@ -27,22 +27,28 @@ const login = async (req, res, next) => {
   // grabs necessary info from body
   const { user_email, user_password } = req.body;
 
+  const req_user_email = user_email;
+  const req_user_password = user_password;
   let validUser;
 
   try {
     validUser = await User.findOne({
-      user_email: user_email,
-      user_password: user_password,
+      user_email: req_user_email,
+      user_password: req_user_password,
     });
-
-    console.log("VALID USER ID:", validUser._id);
   } catch (err) {
-    console.log("ERROR WHILE LOGGING IN");
+    console.log("CANT FIND USER CREDS. ERROR IN USER CONTROLLER");
     return next(err);
   }
 
+  if (!validUser) {
+    return next(
+      new HttpError("No user found with given email and password", 403)
+    );
+  }
+
   // response
-  res.status(200).json({ validUserId: validUser._id });
+  res.status(200).json({ validUserId: validUser });
 };
 
 /**
